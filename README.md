@@ -1,7 +1,7 @@
 # CKIA
 
-**Warning**
-This project is currently a very early Work In Progress.
+> **Warning**
+> This project is currently a very early Work In Progress.
 
 \[SEE\] + \[KEE\] + \[UH\]
 
@@ -9,7 +9,7 @@ ckia (cloud know it all) is a open source command line tool that is intended to 
 
 The key features of CKIA are:
 
-- ** Cloud Auditing **: Audit your cloud configuration for best practices, cost optimizations, performance Improvements, security misconfigurations, Fault Tolerance recommendation, and Service limits. 
+- **Cloud Auditing**: Audit your cloud configuration for best practices, cost optimizations, performance Improvements, security misconfigurations, Fault Tolerance recommendation, and Service limits. 
 
 # Available Checks
 
