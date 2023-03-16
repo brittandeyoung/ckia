@@ -1,25 +1,21 @@
 package aws
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 
 	"github.com/brittandeyoung/ckia/cmd"
 	"github.com/brittandeyoung/ckia/cmd/aws/cost"
+	"github.com/brittandeyoung/ckia/internal/common"
 	"github.com/spf13/cobra"
 )
 
 type Checks struct {
 	CostOptimization []interface{} `json:"costOptimization"`
-}
-
-func PrettyString(str string) (string, error) {
-	var prettyJSON bytes.Buffer
-	if err := json.Indent(&prettyJSON, []byte(str), "", "    "); err != nil {
-		return "", err
-	}
-	return prettyJSON.String(), nil
+	Performance      []interface{} `json:"performance"`
+	Security         []interface{} `json:"security"`
+	FaultTolerance   []interface{} `json:"faultTolerance"`
+	ServiceLimits    []interface{} `json:"serviceLimits"`
 }
 
 // checkCmd represents the check command
@@ -34,7 +30,7 @@ var checkCmd = &cobra.Command{
 		if err != nil {
 			fmt.Print("An Error happened when marshaling json")
 		}
-		fmt.Println(PrettyString(string(json)))
+		fmt.Println(common.PrettyString(string(json)))
 	},
 }
 

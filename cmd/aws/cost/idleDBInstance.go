@@ -11,7 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
-	"github.com/brittandeyoung/ckia/cmd/aws/common"
+	"github.com/brittandeyoung/ckia/internal/common"
 )
 
 const (
