@@ -1,11 +1,16 @@
 package aws
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 
+	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/brittandeyoung/ckia/cmd"
 	"github.com/brittandeyoung/ckia/cmd/aws/cost"
+	"github.com/brittandeyoung/ckia/cmd/aws/security"
+	"github.com/brittandeyoung/ckia/internal/client"
 	"github.com/brittandeyoung/ckia/internal/common"
 	"github.com/spf13/cobra"
 )
@@ -24,8 +29,17 @@ var checkCmd = &cobra.Command{
 	Short: "Run available checks for aws",
 	Long:  `Run available opinionated checks for aws cloud.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx := context.TODO()
+		cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
+		if err != nil {
+			log.Fatalf("unable to load SDK config, %v", err)
+		}
+		conn := client.InitiateClient(cfg)
+
 		allChecks := Checks{}
-		allChecks.CostOptimization = append(allChecks.CostOptimization, cost.ListRDSIdleDB())
+		allChecks.CostOptimization = append(allChecks.CostOptimization, cost.FindIdleDBInstances(ctx, conn))
+		allChecks.Security = append(allChecks.Security, security.FindRootAccountsMissingMFA(ctx, conn))
+
 		json, err := json.Marshal(allChecks)
 		if err != nil {
 			fmt.Print("An Error happened when marshaling json")

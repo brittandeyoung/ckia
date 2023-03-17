@@ -17,11 +17,12 @@ We are currently focused on duplicating the AWS Trusted advisor checks, but are 
 
 | Id | Provider | Check Category |  Name | Rule Description|
 |--|----------|------------|--------------------------------------|------------------------------------------------------------------------|
-| ckia:aws:cost:IdleDBInstanceCheck | AWS      | Cost Optimization | IdleDBInstances |  Any RDS DB instance that has not had a connection in the last 7 days is considered idle. |                                                     |
+| ckia:aws:cost:IdleDBInstance | AWS      | Cost Optimization | RDS Idle DB Instances |  Any RDS DB instance that has not had a connection in the last 7 days is considered idle. |                  
+| ckia:aws:security:RootAccountMissingMFA | AWS      | Security | MFA on Root Account |  MFA is not enabled on the root account. | 
 
 # Contributing
 
-As this project matures the contribution process will be updated. For now please feel free to fork the repo and provide a pull request for review. 
+As this project matures the contribution process will be updated. For now please feel free to fork the repo and provide a pull request for review or open up issues.
 
 # Getting Started & Documentation
 

@@ -57,8 +57,12 @@ github.com/aws/aws-sdk-go-v2/internal/ini v1.3.30 h1:IVx9L7YFhpPq0tTnGo8u8TpluFu
 github.com/aws/aws-sdk-go-v2/internal/ini v1.3.30/go.mod h1:vsbq62AOBwQ1LJ/GWKFxX8beUEYeRp/Agitrxee2/qM=
 github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.25.4 h1:I4TEFOXfzTvWAZKiWGZ81lGiCSo8mlasv7gn8fbU1Ls=
 github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.25.4/go.mod h1:Y8DWauoBMhhYkOi3jlYJbD8vBbBjJJuOa9IBEgvucxE=
+github.com/aws/aws-sdk-go-v2/service/iam v1.19.6 h1:5cwCVkREx62atl2qRLge5zyh8QmvIYtAgb2Fs7yKQ6k=
+github.com/aws/aws-sdk-go-v2/service/iam v1.19.6/go.mod h1:sapsBrGFSqYB1rBHoPCQ3/wmExVPF896OSMwkO2rMWQ=
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.23 h1:QoOybhwRfciWUBbZ0gp9S7XaDnCuSTeK/fySB99V1ls=
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.23/go.mod h1:9uPh+Hrz2Vn6oMnQYiUi/zbh3ovbnQk19YKINkQny44=
+github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.24 h1:c5qGfdbCHav6viBwiyDns3OXqhqAbGjfIB4uVu2ayhk=
+github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.24/go.mod h1:HMA4FZG6fyib+NDo5bpIxX1EhYjrAOveZJY2YR0xrNE=
 github.com/aws/aws-sdk-go-v2/service/pricing v1.19.1 h1:Xe9dtxjAiK1phq4Iy2PUmmIMoLgrdXmeuTrHpBN5EFM=
 github.com/aws/aws-sdk-go-v2/service/pricing v1.19.1/go.mod h1:ZoUjuKeZhqRPwgc+sWUsql6LNYBlpMkF8+tv/k/ospE=
 github.com/aws/aws-sdk-go-v2/service/rds v1.40.5 h1:m4v9hSOgnLmSDbdVdNT0H8GTY6tik7uB7SVV/SFbhLY=
@@ -69,6 +73,8 @@ github.com/aws/aws-sdk-go-v2/service/ssooidc v1.14.4 h1:YRkWXQveFb0tFC0TLktmmhGs
 github.com/aws/aws-sdk-go-v2/service/ssooidc v1.14.4/go.mod h1:zVwRrfdSmbRZWkUkWjOItY7SOalnFnq/Yg2LVPqDjwc=
 github.com/aws/aws-sdk-go-v2/service/sts v1.18.5 h1:L1600eLr0YvTT7gNh3Ni24yGI7NSHkq9Gp62vijPRCs=
 github.com/aws/aws-sdk-go-v2/service/sts v1.18.5/go.mod h1:1mKZHLLpDMHTNSYPJ7qrcnCQdHCWsNQaT0xRvq2u80s=
+github.com/aws/aws-sdk-go-v2/service/sts v1.18.6 h1:rIFn5J3yDoeuKCE9sESXqM5POTAhOP1du3bv/qTL+tE=
+github.com/aws/aws-sdk-go-v2/service/sts v1.18.6/go.mod h1:48WJ9l3dwP0GSHWGc5sFGGlCkuA82Mc2xnw+T6Q8aDw=
 github.com/aws/smithy-go v1.13.5 h1:hgz0X/DX0dGqTYpGALqXJoRKRj5oQ7150i5FdTePzO8=
 github.com/aws/smithy-go v1.13.5/go.mod h1:Tg+OJXh4MB2R/uN61Ko2f6hTZwB/ZYGOtib8J3gBHzA=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
