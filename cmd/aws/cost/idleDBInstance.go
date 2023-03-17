@@ -39,7 +39,8 @@ type IdleDBInstanceCheck struct {
 }
 
 func ListRDSIdleDB() IdleDBInstanceCheck {
-	cfg, err := config.LoadDefaultConfig(context.TODO(), config.WithRegion("us-east-1"))
+	ctx := context.TODO()
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
@@ -61,7 +62,7 @@ func ListRDSIdleDB() IdleDBInstanceCheck {
 
 	in := &rds.DescribeDBInstancesInput{}
 
-	out, err := svc.DescribeDBInstances(context.TODO(), in)
+	out, err := svc.DescribeDBInstances(ctx, in)
 
 	if err != nil {
 		fmt.Errorf("Error Listing RDS Instances: %s", err)
@@ -70,7 +71,7 @@ func ListRDSIdleDB() IdleDBInstanceCheck {
 	var idleDBInstances []IdleDBInstance
 	for _, dbInstance := range out.DBInstances {
 
-		metrics, err := cloudwatchSvc.GetMetricStatistics(context.TODO(), &cloudwatch.GetMetricStatisticsInput{
+		metrics, err := cloudwatchSvc.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 			MetricName: aws.String("DatabaseConnections"),
 			Period:     aws.Int32(3600),
 			Namespace:  aws.String("AWS/RDS"),
@@ -102,30 +103,62 @@ func ListRDSIdleDB() IdleDBInstanceCheck {
 		if connectionFound {
 			// pricingSvc := pricing.NewFromConfig(cfg)
 			// filters := []pricingtypes.Filter{
-			// 	pricingtypes.Filter{
+			// 	{
 			// 		Field: aws.String("InstanceType"),
 			// 		Type:  "TERM_MATCH",
 			// 		Value: dbInstance.DBInstanceClass,
 			// 	},
-			// 	pricingtypes.Filter{
-			// 		Field: aws.String("InstanceType"),
+			// 	// These two seam to not match what the pricing API is expecting
+			// 	{
+			// 		Field: aws.String("storage"),
 			// 		Type:  "TERM_MATCH",
-			// 		Value: dbInstance.DBInstanceClass,
+			// 		Value: dbInstance.StorageType,
+			// 	},
+			// 	{
+			// 		Field: aws.String("databaseEngine"),
+			// 		Type:  "TERM_MATCH",
+			// 		Value: dbInstance.Engine,
+			// 	},
+			// 	{
+			// 		Field: aws.String("deploymentOption"),
+			// 		Type:  "TERM_MATCH",
+			// 		Value: aws.String("Single-AZ"),
+			// 	},
+			// 	{
+			// 		Field: aws.String("termType"),
+			// 		Type:  "TERM_MATCH",
+			// 		Value: aws.String("OnDemand"),
+			// 	},
+			// 	{
+			// 		Field: aws.String("regionCode"),
+			// 		Type:  "TERM_MATCH",
+			// 		Value: &cfg.Region,
+			// 	},
+			// 	{
+			// 		Field: aws.String("purchaseOption"),
+			// 		Type:  "TERM_MATCH",
+			// 		Value: aws.String("No Upfront"),
 			// 	},
 			// }
 
-			// in = &pricing.GetProductsInput{
-			// 	ServiceCode: "AmazonRDS",
+			// pricingIn := &pricing.GetProductsInput{
+			// 	ServiceCode: aws.String("AmazonRDS"),
 			// 	Filters:     filters,
 			// }
-			// pricingSvc.GetProducts()
+			// pricingData, err := pricingSvc.GetProducts(ctx, pricingIn)
+
+			// if err != nil {
+			// 	return IdleDBInstanceCheck{}
+			// }
+
 			idleDBInstance.DBInstanceName = aws.ToString(dbInstance.DBInstanceIdentifier)
 			idleDBInstance.Region = cfg.Region
 			idleDBInstance.DaysSinceLastConnection = 7
 			idleDBInstance.InstanceType = aws.ToString(dbInstance.DBInstanceClass)
 			idleDBInstance.MultiAZ = dbInstance.MultiAZ
 			idleDBInstance.StorageProvisionedInGB = int(dbInstance.AllocatedStorage)
-			idleDBInstance.EstimatedMonthlySavings = 100
+			// Still trying to figure out how to get the proper on demand pricing via the API
+			idleDBInstance.EstimatedMonthlySavings = 0
 			idleDBInstances = append(idleDBInstances, idleDBInstance)
 		}
 
