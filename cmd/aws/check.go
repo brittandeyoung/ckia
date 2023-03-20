@@ -5,11 +5,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/brittandeyoung/ckia/cmd"
-	"github.com/brittandeyoung/ckia/cmd/aws/cost"
-	"github.com/brittandeyoung/ckia/cmd/aws/security"
 	"github.com/brittandeyoung/ckia/internal/client"
 	"github.com/brittandeyoung/ckia/internal/common"
 	"github.com/spf13/cobra"
@@ -37,8 +36,17 @@ var checkCmd = &cobra.Command{
 		conn := client.InitiateClient(cfg)
 
 		allChecks := Checks{}
-		allChecks.CostOptimization = append(allChecks.CostOptimization, cost.FindIdleDBInstances(ctx, conn))
-		allChecks.Security = append(allChecks.Security, security.FindRootAccountsMissingMFA(ctx, conn))
+		checksMap := buildChecksMap()
+		for k, _ := range checksMap {
+			if strings.Contains(k, "aws:cost") {
+				res, _ := Call(k, ctx, conn)
+				allChecks.CostOptimization = append(allChecks.CostOptimization, res)
+			}
+			if strings.Contains(k, "aws:security") {
+				res, _ := Call(k, ctx, conn)
+				allChecks.Security = append(allChecks.Security, res)
+			}
+		}
 
 		json, err := json.Marshal(allChecks)
 		if err != nil {
