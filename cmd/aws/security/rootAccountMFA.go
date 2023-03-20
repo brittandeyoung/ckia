@@ -30,8 +30,8 @@ type RootAccountMFACheck struct {
 	RootAccountsMissingMFA []RootAccountMFA `json:"rootAccountsMissingMFA"`
 }
 
-func FindRootAccountsMissingMFA(ctx context.Context, conn client.AWSClient) RootAccountMFACheck {
-	check := RootAccountMFACheck{
+func FindRootAccountsMissingMFA(ctx context.Context, conn client.AWSClient) *RootAccountMFACheck {
+	check := &RootAccountMFACheck{
 		Check: common.Check{
 			Id:                  RootAccountMFACheckId,
 			Name:                RootAccountMFACheckName,
@@ -45,14 +45,14 @@ func FindRootAccountsMissingMFA(ctx context.Context, conn client.AWSClient) Root
 	accountSummary, err := conn.IAM.GetAccountSummary(ctx, &iam.GetAccountSummaryInput{})
 
 	if err != nil {
-		return RootAccountMFACheck{}
+		return nil
 	}
 
 	if accountSummary.SummaryMap["AccountMFAEnabled"] != 1 {
 		identity, err := conn.STS.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 
 		if err != nil {
-			return RootAccountMFACheck{}
+			return nil
 		}
 
 		accounts := []RootAccountMFA{
@@ -67,6 +67,8 @@ func FindRootAccountsMissingMFA(ctx context.Context, conn client.AWSClient) Root
 
 		// Can only get account name from the organization account
 		// check.AccountName =
+	} else {
+		return nil
 	}
 
 	return check

@@ -40,11 +40,15 @@ var checkCmd = &cobra.Command{
 		for k, _ := range checksMap {
 			if strings.Contains(k, "aws:cost") {
 				res, _ := Call(k, ctx, conn)
-				allChecks.CostOptimization = append(allChecks.CostOptimization, res)
+				if res != nil {
+					allChecks.CostOptimization = append(allChecks.CostOptimization, res)
+				}
 			}
 			if strings.Contains(k, "aws:security") {
 				res, _ := Call(k, ctx, conn)
-				allChecks.Security = append(allChecks.Security, res)
+				if res != nil {
+					allChecks.Security = append(allChecks.Security, res)
+				}
 			}
 		}
 

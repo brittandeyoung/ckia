@@ -37,8 +37,8 @@ type IdleDBInstanceCheck struct {
 	IdleDBInstances []IdleDBInstance `json:"idleDBInstances"`
 }
 
-func FindIdleDBInstances(ctx context.Context, conn client.AWSClient) IdleDBInstanceCheck {
-	check := IdleDBInstanceCheck{
+func FindIdleDBInstances(ctx context.Context, conn client.AWSClient) *IdleDBInstanceCheck {
+	check := &IdleDBInstanceCheck{
 		Check: common.Check{
 			Id:                  IdleDBInstanceCheckId,
 			Name:                IdleDBInstanceCheckName,
@@ -58,6 +58,9 @@ func FindIdleDBInstances(ctx context.Context, conn client.AWSClient) IdleDBInsta
 		fmt.Errorf("Error Listing RDS Instances: %s", err)
 	}
 
+	if len(out.DBInstances) == 0 {
+		return nil
+	}
 	var idleDBInstances []IdleDBInstance
 	for _, dbInstance := range out.DBInstances {
 
@@ -77,16 +80,10 @@ func FindIdleDBInstances(ctx context.Context, conn client.AWSClient) IdleDBInsta
 		})
 
 		if err != nil {
-			return IdleDBInstanceCheck{}
+			return nil
 		}
-
-		connectionFound := false
 		var idleDBInstance IdleDBInstance
-		for _, dataPoint := range metrics.Datapoints {
-			if *dataPoint.Average != 0 {
-				connectionFound = true
-			}
-		}
+		_, connectionFound := expandConnections(metrics.Datapoints)
 
 		if !connectionFound {
 			// pricingSvc := pricing.NewFromConfig(cfg)
@@ -154,4 +151,16 @@ func FindIdleDBInstances(ctx context.Context, conn client.AWSClient) IdleDBInsta
 
 	check.IdleDBInstances = idleDBInstances
 	return check
+}
+
+func expandConnections(dataPoints []types.Datapoint) ([]types.Datapoint, bool) {
+	var filteredDataPoints []types.Datapoint
+	connectionFound := false
+	for _, dataPoint := range dataPoints {
+		if *dataPoint.Average != 0 {
+			filteredDataPoints = append(filteredDataPoints, dataPoint)
+			connectionFound = true
+		}
+	}
+	return filteredDataPoints, connectionFound
 }
