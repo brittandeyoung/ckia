@@ -3,6 +3,8 @@ package common
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"reflect"
 )
 
 type Check struct {
@@ -20,4 +22,21 @@ func PrettyString(str string) (string, error) {
 		return "", err
 	}
 	return prettyJSON.String(), nil
+}
+
+func Call(funcName string, checksMap map[string]interface{}, params ...interface{}) (result interface{}, err error) {
+	// checksMap := buildChecksMap()
+	f := reflect.ValueOf(checksMap[funcName])
+	if len(params) != f.Type().NumIn() {
+		err = errors.New("The number of params is out of index.")
+		return
+	}
+	in := make([]reflect.Value, len(params))
+	for k, param := range params {
+		in[k] = reflect.ValueOf(param)
+	}
+	var res []reflect.Value
+	res = f.Call(in)
+	result = res[0].Interface()
+	return
 }

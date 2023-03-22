@@ -9,6 +9,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/brittandeyoung/ckia/cmd"
+	internalAws "github.com/brittandeyoung/ckia/internal/aws"
 	"github.com/brittandeyoung/ckia/internal/client"
 	"github.com/brittandeyoung/ckia/internal/common"
 	"github.com/spf13/cobra"
@@ -36,16 +37,16 @@ var checkCmd = &cobra.Command{
 		conn := client.InitiateClient(cfg)
 
 		allChecks := Checks{}
-		checksMap := buildChecksMap()
+		checksMap := internalAws.BuildChecksMap()
 		for k, _ := range checksMap {
 			if strings.Contains(k, "aws:cost") {
-				res, _ := Call(k, ctx, conn)
+				res, _ := common.Call(k, checksMap, ctx, conn)
 				if res != nil {
 					allChecks.CostOptimization = append(allChecks.CostOptimization, res)
 				}
 			}
 			if strings.Contains(k, "aws:security") {
-				res, _ := Call(k, ctx, conn)
+				res, _ := common.Call(k, checksMap, ctx, conn)
 				if res != nil {
 					allChecks.Security = append(allChecks.Security, res)
 				}

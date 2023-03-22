@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/brittandeyoung/ckia/cmd"
+	internalAws "github.com/brittandeyoung/ckia/internal/aws"
 	"github.com/spf13/cobra"
 )
 
@@ -13,7 +14,10 @@ var listCmd = &cobra.Command{
 	Short: "List available checks for aws",
 	Long:  `List the available opinionated checks for aws cloud.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("list called")
+		checksMap := internalAws.BuildChecksMap()
+		for k, _ := range checksMap {
+			fmt.Println(k)
+		}
 	},
 }
 
