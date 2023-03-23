@@ -3,7 +3,7 @@ module github.com/brittandeyoung/ckia
 go 1.19
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.17.6
+	github.com/aws/aws-sdk-go-v2 v1.17.7
 	github.com/aws/aws-sdk-go-v2/config v1.18.15
 	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.25.4
 	github.com/aws/aws-sdk-go-v2/service/iam v1.19.6
