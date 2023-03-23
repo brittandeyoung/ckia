@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.18.15
 	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.25.6
 	github.com/aws/aws-sdk-go-v2/service/iam v1.19.8
-	github.com/aws/aws-sdk-go-v2/service/pricing v1.19.1
+	github.com/aws/aws-sdk-go-v2/service/pricing v1.19.2
 	github.com/aws/aws-sdk-go-v2/service/rds v1.40.7
 	github.com/aws/aws-sdk-go-v2/service/sts v1.18.7
 	github.com/spf13/cobra v1.6.1
