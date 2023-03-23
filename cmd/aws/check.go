@@ -38,15 +38,15 @@ var checkCmd = &cobra.Command{
 
 		allChecks := Checks{}
 		checksMap := internalAws.BuildChecksMap()
-		for k, _ := range checksMap {
+		for k := range checksMap {
 			if strings.Contains(k, "aws:cost") {
-				res, _ := common.Call(k, checksMap, ctx, conn)
+				res, _ := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
 				if res != nil {
 					allChecks.CostOptimization = append(allChecks.CostOptimization, res)
 				}
 			}
 			if strings.Contains(k, "aws:security") {
-				res, _ := common.Call(k, checksMap, ctx, conn)
+				res, _ := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
 				if res != nil {
 					allChecks.Security = append(allChecks.Security, res)
 				}

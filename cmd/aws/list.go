@@ -1,10 +1,13 @@
 package aws
 
 import (
+	"encoding/json"
 	"fmt"
+	"strings"
 
 	"github.com/brittandeyoung/ckia/cmd"
 	internalAws "github.com/brittandeyoung/ckia/internal/aws"
+	"github.com/brittandeyoung/ckia/internal/common"
 	"github.com/spf13/cobra"
 )
 
@@ -14,10 +17,27 @@ var listCmd = &cobra.Command{
 	Short: "List available checks for aws",
 	Long:  `List the available opinionated checks for aws cloud.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		allChecks := Checks{}
 		checksMap := internalAws.BuildChecksMap()
 		for k, _ := range checksMap {
-			fmt.Println(k)
+			if strings.Contains(k, "aws:cost") {
+				res, _ := common.Call(k, checksMap, common.MethodNameList)
+				if res != nil {
+					allChecks.CostOptimization = append(allChecks.CostOptimization, res)
+				}
+			}
+			if strings.Contains(k, "aws:security") {
+				res, _ := common.Call(k, checksMap, common.MethodNameList)
+				if res != nil {
+					allChecks.Security = append(allChecks.Security, res)
+				}
+			}
 		}
+		json, err := json.Marshal(allChecks)
+		if err != nil {
+			fmt.Print("An Error happened when marshaling json")
+		}
+		fmt.Println(common.PrettyString(string(json)))
 	},
 }
 

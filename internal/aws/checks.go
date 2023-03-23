@@ -10,9 +10,9 @@ type checkMapping map[string]interface{}
 func BuildChecksMap() map[string]interface{} {
 	checksMap := checkMapping{
 		// Cost Checks go here
-		cost.IdleDBInstanceCheckId: cost.FindIdleDBInstances,
+		cost.IdleDBInstanceCheckId: new(cost.IdleDBInstanceCheck),
 		// Security checks go here
-		security.RootAccountMFACheckId: security.FindRootAccountsMissingMFA,
+		security.RootAccountMFACheckId: new(security.RootAccountMFACheck),
 	}
 	return checksMap
 }

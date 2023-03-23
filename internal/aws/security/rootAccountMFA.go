@@ -30,7 +30,21 @@ type RootAccountMFACheck struct {
 	RootAccountsMissingMFA []RootAccountMFA `json:"rootAccountsMissingMFA"`
 }
 
-func FindRootAccountsMissingMFA(ctx context.Context, conn client.AWSClient) *RootAccountMFACheck {
+func (v RootAccountMFACheck) List() *RootAccountMFACheck {
+	check := &RootAccountMFACheck{
+		Check: common.Check{
+			Id:                  RootAccountMFACheckId,
+			Name:                RootAccountMFACheckName,
+			Description:         RootAccountMFACheckDescription,
+			Criteria:            RootAccountMFACheckCriteria,
+			RecommendedAction:   RootAccountMFACheckRecommendedAction,
+			AdditionalResources: RootAccountMFACheckAdditionalResources,
+		},
+	}
+	return check
+}
+
+func (v RootAccountMFACheck) Run(ctx context.Context, conn client.AWSClient) *RootAccountMFACheck {
 	check := &RootAccountMFACheck{
 		Check: common.Check{
 			Id:                  RootAccountMFACheckId,

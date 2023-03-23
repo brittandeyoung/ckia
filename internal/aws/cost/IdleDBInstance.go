@@ -37,7 +37,7 @@ type IdleDBInstanceCheck struct {
 	IdleDBInstances []IdleDBInstance `json:"idleDBInstances"`
 }
 
-func FindIdleDBInstances(ctx context.Context, conn client.AWSClient) *IdleDBInstanceCheck {
+func (v IdleDBInstanceCheck) List() *IdleDBInstanceCheck {
 	check := &IdleDBInstanceCheck{
 		Check: common.Check{
 			Id:                  IdleDBInstanceCheckId,
@@ -48,6 +48,11 @@ func FindIdleDBInstances(ctx context.Context, conn client.AWSClient) *IdleDBInst
 			AdditionalResources: IdleDBInstanceCheckAdditionalResources,
 		},
 	}
+	return check
+}
+
+func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *IdleDBInstanceCheck {
+	check := new(IdleDBInstanceCheck).List()
 
 	currentTime := time.Now()
 
