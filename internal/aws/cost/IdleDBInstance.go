@@ -66,6 +66,7 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 	if len(out.DBInstances) == 0 {
 		return nil
 	}
+	
 	var idleDBInstances []IdleDBInstance
 	for _, dbInstance := range out.DBInstances {
 
@@ -80,15 +81,16 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 					Value: dbInstance.DBInstanceIdentifier,
 				},
 			},
-			StartTime: aws.Time(currentTime.AddDate(0, 0, -7)),
+			StartTime: aws.Time(currentTime.AddDate(0, 0, -14)),
 			EndTime:   aws.Time(currentTime),
 		})
 
 		if err != nil {
-			return nil
+			fmt.Errorf("Error Retrieving RDS Metrics for Instances: %s", aws.ToString(dbInstance.DBInstanceIdentifier))
 		}
+		
 		var idleDBInstance IdleDBInstance
-		_, connectionFound := expandConnections(metrics.Datapoints)
+		daysSinceConnection, connectionFound := expandConnections(metrics.Datapoints)
 
 		if !connectionFound {
 			// pricingSvc := pricing.NewFromConfig(cfg)
@@ -143,7 +145,7 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 
 			idleDBInstance.DBInstanceName = aws.ToString(dbInstance.DBInstanceIdentifier)
 			idleDBInstance.Region = conn.Region
-			idleDBInstance.DaysSinceLastConnection = 7
+			idleDBInstance.DaysSinceLastConnection = daysSinceConnection
 			idleDBInstance.InstanceType = aws.ToString(dbInstance.DBInstanceClass)
 			idleDBInstance.MultiAZ = dbInstance.MultiAZ
 			idleDBInstance.StorageProvisionedInGB = int(dbInstance.AllocatedStorage)
@@ -158,14 +160,21 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 	return check
 }
 
-func expandConnections(dataPoints []types.Datapoint) ([]types.Datapoint, bool) {
-	var filteredDataPoints []types.Datapoint
+func expandConnections(dataPoints []types.Datapoint) (int, bool) {
 	connectionFound := false
+	var daysSinceConnection float64
+	daysSinceConnection = 14
 	for _, dataPoint := range dataPoints {
-		if *dataPoint.Average != 0 {
-			filteredDataPoints = append(filteredDataPoints, dataPoint)
-			connectionFound = true
+		if aws.ToFloat64(dataPoint.Average) != 0 {
+			duration := time.Now().Sub(aws.ToTime(dataPoint.Timestamp))
+			if duration.Hours()/24  < daysSinceConnection {
+				daysSinceConnection = duration.Hours()/24
+			}
+			
+			if duration.Hours()/24 <= 7 {
+				connectionFound = true
+			}
 		}
 	}
-	return filteredDataPoints, connectionFound
+	return int(daysSinceConnection), connectionFound
 }

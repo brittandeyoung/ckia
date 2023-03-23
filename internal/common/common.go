@@ -25,7 +25,6 @@ func PrettyString(str string) (string, error) {
 }
 
 func Call(funcName string, checksMap map[string]interface{}, method string, params ...interface{}) (result interface{}, err error) {
-	// checksMap := buildChecksMap()
 	f := reflect.ValueOf(checksMap[funcName]).MethodByName(method)
 	if len(params) != f.Type().NumIn() {
 		err = errors.New("The number of params is out of index.")

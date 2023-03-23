@@ -19,7 +19,7 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		allChecks := Checks{}
 		checksMap := internalAws.BuildChecksMap()
-		for k, _ := range checksMap {
+		for k := range checksMap {
 			if strings.Contains(k, "aws:cost") {
 				res, _ := common.Call(k, checksMap, common.MethodNameList)
 				if res != nil {
