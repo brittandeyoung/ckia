@@ -66,7 +66,7 @@ func TestExpandUnderutilizedVolume_basic(t *testing.T) {
 		},
 	}
 	ctx := context.TODO()
-	cfg, err := config.LoadDefaultConfig(ctx)
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
@@ -146,7 +146,7 @@ func TestExpandUnderutilizedVolume_attachedVolume(t *testing.T) {
 		},
 	}
 	ctx := context.TODO()
-	cfg, err := config.LoadDefaultConfig(ctx)
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
@@ -211,7 +211,7 @@ func TestExpandUnderutilizedVolume_activeVolume(t *testing.T) {
 		},
 	}
 	ctx := context.TODO()
-	cfg, err := config.LoadDefaultConfig(ctx)
+	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
 	}
