@@ -109,7 +109,10 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 			// Still trying to figure out how to get the proper pricing via the API
 			// underutilizedVolume.MonthlyStorageCost = 0
 		}
-		underutilizedVolumes = append(underutilizedVolumes, underutilizedVolume)
+		if underutilizedVolume.VolumeId != "" {
+			underutilizedVolumes = append(underutilizedVolumes, underutilizedVolume)
+
+		}
 	}
 
 	check.UnderutilizedEBSVolumes = underutilizedVolumes
