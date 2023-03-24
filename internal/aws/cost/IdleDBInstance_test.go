@@ -96,12 +96,12 @@ func TestExpandConnections_withConnectionsInSevenDays(t *testing.T) {
 
 	daysSinceConnection, connectionFound := expandConnections(dataPoints)
 
-	if !connectionFound  {
+	if !connectionFound {
 		t.Fatal(`Connection not found when connection is present`)
 	}
-	
+
 	if daysSinceConnection != 2 {
-		t.Fatalf(`Days Since Connetion should be 3, Got %d`, daysSinceConnection)		
+		t.Fatalf(`Days Since Connetion should be 3, Got %d`, daysSinceConnection)
 	}
 }
 
@@ -146,11 +146,11 @@ func TestExpandConnections_withConnectionsAfterSevenDays(t *testing.T) {
 
 	daysSinceConnection, connectionFound := expandConnections(dataPoints)
 
-	if connectionFound  {
+	if connectionFound {
 		t.Fatal(`Connection reported within the last 7 days when not present.`)
 	}
-	
+
 	if daysSinceConnection != 8 {
-		t.Fatalf(`Days Since Connetion should be 8, Got %d`, daysSinceConnection)		
+		t.Fatalf(`Days Since Connetion should be 8, Got %d`, daysSinceConnection)
 	}
 }
