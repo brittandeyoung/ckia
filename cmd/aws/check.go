@@ -30,7 +30,7 @@ var checkCmd = &cobra.Command{
 	Long:  `Run available opinionated checks for aws cloud.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		ctx := context.TODO()
-		cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
+		cfg, err := config.LoadDefaultConfig(ctx)
 		if err != nil {
 			log.Fatalf("unable to load SDK config, %v", err)
 		}

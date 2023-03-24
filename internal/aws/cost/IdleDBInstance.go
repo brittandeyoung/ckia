@@ -66,7 +66,7 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 	if len(out.DBInstances) == 0 {
 		return nil
 	}
-	
+
 	var idleDBInstances []IdleDBInstance
 	for _, dbInstance := range out.DBInstances {
 
@@ -88,7 +88,7 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 		if err != nil {
 			fmt.Errorf("Error Retrieving RDS Metrics for Instances: %s", aws.ToString(dbInstance.DBInstanceIdentifier))
 		}
-		
+
 		var idleDBInstance IdleDBInstance
 		daysSinceConnection, connectionFound := expandConnections(metrics.Datapoints)
 
@@ -167,10 +167,10 @@ func expandConnections(dataPoints []types.Datapoint) (int, bool) {
 	for _, dataPoint := range dataPoints {
 		if aws.ToFloat64(dataPoint.Average) != 0 {
 			duration := time.Now().Sub(aws.ToTime(dataPoint.Timestamp))
-			if duration.Hours()/24  < daysSinceConnection {
-				daysSinceConnection = duration.Hours()/24
+			if duration.Hours()/24 < daysSinceConnection {
+				daysSinceConnection = duration.Hours() / 24
 			}
-			
+
 			if duration.Hours()/24 <= 7 {
 				connectionFound = true
 			}
