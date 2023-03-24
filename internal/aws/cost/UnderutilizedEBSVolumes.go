@@ -2,7 +2,6 @@ package cost
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -54,7 +53,7 @@ func (v UnderutilizedEBSVolumesCheck) List() *UnderutilizedEBSVolumesCheck {
 	return check
 }
 
-func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSClient) *UnderutilizedEBSVolumesCheck {
+func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSClient) (*UnderutilizedEBSVolumesCheck, error) {
 	check := new(UnderutilizedEBSVolumesCheck).List()
 
 	currentTime := time.Now()
@@ -63,11 +62,11 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 	out, err := conn.EC2.DescribeVolumes(ctx, in)
 
 	if err != nil {
-		fmt.Errorf("Error Listing Volumes: %s", err)
+		return nil, err
 	}
 
 	if len(out.Volumes) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	var underutilizedVolumes []UnderutilizedEBSVolumes
@@ -91,7 +90,7 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 		})
 
 		if err != nil {
-			fmt.Errorf("Error Retrieving EBS Metrics for Volume: %s", aws.ToString(volume.VolumeId))
+			return nil, err
 		}
 
 		underutilizedVolume = expandUnderutilizedVolume(conn, volume, metrics.Datapoints)
@@ -102,7 +101,7 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 			})
 
 			if err != nil {
-				fmt.Errorf("Error Listing Snapshots: %s", err)
+				return nil, err
 			}
 
 			underutilizedVolume = expandSnapshot(snapshots.Snapshots, underutilizedVolume)
@@ -116,7 +115,7 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 	}
 
 	check.UnderutilizedEBSVolumes = underutilizedVolumes
-	return check
+	return check, nil
 }
 
 func expandUnderutilizedVolume(conn client.AWSClient, volume types.Volume, dataPoints []cloudWatchTypes.Datapoint) UnderutilizedEBSVolumes {

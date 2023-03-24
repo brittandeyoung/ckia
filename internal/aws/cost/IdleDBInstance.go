@@ -2,7 +2,6 @@ package cost
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -51,7 +50,7 @@ func (v IdleDBInstanceCheck) List() *IdleDBInstanceCheck {
 	return check
 }
 
-func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *IdleDBInstanceCheck {
+func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) (*IdleDBInstanceCheck, error) {
 	check := new(IdleDBInstanceCheck).List()
 
 	currentTime := time.Now()
@@ -60,11 +59,11 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 	out, err := conn.RDS.DescribeDBInstances(ctx, in)
 
 	if err != nil {
-		fmt.Errorf("Error Listing RDS Instances: %s", err)
+		return nil, err
 	}
 
 	if len(out.DBInstances) == 0 {
-		return nil
+		return nil, nil
 	}
 
 	var idleDBInstances []IdleDBInstance
@@ -86,7 +85,7 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 		})
 
 		if err != nil {
-			fmt.Errorf("Error Retrieving RDS Metrics for Instances: %s", aws.ToString(dbInstance.DBInstanceIdentifier))
+			return nil, err
 		}
 
 		var idleDBInstance IdleDBInstance
@@ -157,7 +156,7 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) *Id
 	}
 
 	check.IdleDBInstances = idleDBInstances
-	return check
+	return check, nil
 }
 
 func expandConnections(dataPoints []types.Datapoint) (int, bool) {

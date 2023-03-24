@@ -40,13 +40,19 @@ var checkCmd = &cobra.Command{
 		checksMap := internalAws.BuildChecksMap()
 		for k := range checksMap {
 			if strings.Contains(k, "aws:cost") {
-				res, _ := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+				res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+				if err != nil {
+					log.Fatal(err)
+				}
 				if res != nil {
 					allChecks.CostOptimization = append(allChecks.CostOptimization, res)
 				}
 			}
 			if strings.Contains(k, "aws:security") {
-				res, _ := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+				res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+				if err != nil {
+					log.Fatal(err)
+				}
 				if res != nil {
 					allChecks.Security = append(allChecks.Security, res)
 				}

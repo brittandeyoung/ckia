@@ -1,5 +1,5 @@
 # CKIA
-
+[![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 > **Warning**
 > This project is currently a very early Work In Progress.
 
@@ -15,17 +15,13 @@ The key features of CKIA are:
 
 We are currently focused on duplicating the AWS Trusted advisor checks, but are willing to accept contributions to any cloud provider.
 
-| Id | Provider | Check Category |  Name | Rule Description|
-|--|----------|------------|--------------------------------------|------------------------------------------------------------------------|
-| ckia:aws:cost:IdleDBInstance | AWS      | Cost Optimization | RDS Idle DB Instances |  Any RDS DB instance that has not had a connection in the last 7 days is considered idle. |         
-| ckia:aws:cost:UnderutilizedEBSVolumes | AWS      | Cost Optimization | Underutilized Amazon EBS Volumes |  A volume is unattached or had less than 1 IOPS per day for the past 7 days. |         
-| ckia:aws:security:RootAccountMissingMFA | AWS      | Security | MFA on Root Account |  MFA is not enabled on the root account. | 
+[Current List of Available Checks](AVAILABLE_CHECKS.md)
 
 # Contributing
 
-As this project matures the contribution process will be updated. For now please feel free to fork the repo and provide a pull request for review or open up issues.
+Please refer to our [Contributors Guide](CONTRIBUTORS.md)
 
-# Getting Started & Documentation
+# Installation Guide
 
 Documentation is currently a work in progress. This README will contain the majority of the documentation for now. 
 

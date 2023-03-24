@@ -44,7 +44,7 @@ func (v RootAccountMFACheck) List() *RootAccountMFACheck {
 	return check
 }
 
-func (v RootAccountMFACheck) Run(ctx context.Context, conn client.AWSClient) *RootAccountMFACheck {
+func (v RootAccountMFACheck) Run(ctx context.Context, conn client.AWSClient) (*RootAccountMFACheck, error) {
 	check := &RootAccountMFACheck{
 		Check: common.Check{
 			Id:                  RootAccountMFACheckId,
@@ -59,14 +59,14 @@ func (v RootAccountMFACheck) Run(ctx context.Context, conn client.AWSClient) *Ro
 	accountSummary, err := conn.IAM.GetAccountSummary(ctx, &iam.GetAccountSummaryInput{})
 
 	if err != nil {
-		return nil
+		return nil, err
 	}
 
 	if accountSummary.SummaryMap["AccountMFAEnabled"] != 1 {
 		identity, err := conn.STS.GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
 
 		if err != nil {
-			return nil
+			return nil, err
 		}
 
 		accounts := []RootAccountMFA{
@@ -82,8 +82,8 @@ func (v RootAccountMFACheck) Run(ctx context.Context, conn client.AWSClient) *Ro
 		// Can only get account name from the organization account
 		// check.AccountName =
 	} else {
-		return nil
+		return nil, nil
 	}
 
-	return check
+	return check, nil
 }
