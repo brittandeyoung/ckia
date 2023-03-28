@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.91.0
 	github.com/aws/aws-sdk-go-v2/service/iam v1.19.8
 	github.com/aws/aws-sdk-go-v2/service/pricing v1.19.2
-	github.com/aws/aws-sdk-go-v2/service/rds v1.40.7
+	github.com/aws/aws-sdk-go-v2/service/rds v1.41.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.18.7
 	github.com/spf13/cobra v1.6.1
 	github.com/spf13/viper v1.15.0
