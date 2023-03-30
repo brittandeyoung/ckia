@@ -11,7 +11,7 @@ fmt:
 
 test:
 	@echo "==> Running Unit Tests..."
-	go test ./...
+	go test ./... -race -covermode=atomic -coverprofile=coverage.out
 
 
 pr: test build

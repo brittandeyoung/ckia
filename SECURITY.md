@@ -11,7 +11,7 @@ make every effort to acknowledge your contributions.
 
 Report security vulnerabilities by emailing the Atomist security team at:
     
-    brittan@deyoung.dev
+    security@ckia.dev
 
 The lead maintainer will acknowledge your email as soon as possible, and will
 send a more detailed response indicating the next steps in 
