@@ -9,7 +9,7 @@ seriously. Thank you for improving the security of our open source
 software. We appreciate your efforts and responsible disclosure and will
 make every effort to acknowledge your contributions.
 
-Report security vulnerabilities by emailing the Atomist security team at:
+Report security vulnerabilities by emailing the team at:
     
     security@ckia.dev
 
