@@ -3,6 +3,7 @@ package aws
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"strings"
 
 	"github.com/brittandeyoung/ckia/cmd"
@@ -37,20 +38,14 @@ var listCmd = &cobra.Command{
 		if err != nil {
 			fmt.Print("An Error happened when marshaling json")
 		}
-		fmt.Println(common.PrettyString(string(json)))
+		resp, err := common.PrettyString(string(json))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(resp)
 	},
 }
 
 func init() {
 	cmd.AwsCmd.AddCommand(listCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// listCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// listCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

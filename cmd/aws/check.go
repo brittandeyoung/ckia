@@ -29,7 +29,7 @@ var checkCmd = &cobra.Command{
 	Short: "Run available checks for aws",
 	Long:  `Run available opinionated checks for aws cloud.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx := context.TODO()
+		ctx := context.Background()
 		cfg, err := config.LoadDefaultConfig(ctx)
 		if err != nil {
 			log.Fatalf("unable to load SDK config, %v", err)
@@ -63,20 +63,14 @@ var checkCmd = &cobra.Command{
 		if err != nil {
 			fmt.Print("An Error happened when marshaling json")
 		}
-		fmt.Println(common.PrettyString(string(json)))
+		resp, err := common.PrettyString(string(json))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(resp)
 	},
 }
 
 func init() {
 	cmd.AwsCmd.AddCommand(checkCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// checkCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// checkCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

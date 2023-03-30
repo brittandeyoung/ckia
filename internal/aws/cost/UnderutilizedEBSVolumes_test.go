@@ -11,6 +11,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	ec2Types "github.com/aws/aws-sdk-go-v2/service/ec2/types"
 	"github.com/brittandeyoung/ckia/internal/client"
+	"github.com/brittandeyoung/ckia/internal/create"
 )
 
 func TestExpandUnderutilizedVolume_basic(t *testing.T) {
@@ -65,7 +66,7 @@ func TestExpandUnderutilizedVolume_basic(t *testing.T) {
 			},
 		},
 	}
-	ctx := context.TODO()
+	ctx := context.Background()
 	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
@@ -73,6 +74,9 @@ func TestExpandUnderutilizedVolume_basic(t *testing.T) {
 	conn := client.InitiateClient(cfg)
 	underutilizedVolume := expandUnderutilizedVolume(conn, volume, dataPoints)
 
+	if underutilizedVolume == (UnderutilizedEBSVolumes{}) {
+		create.TestFailureNonEmptyStruct(t)
+	}
 	if underutilizedVolume.Region != "us-east-1" {
 		t.Fatal(`Volume Region did not set properly from expand function.`)
 	}
@@ -145,7 +149,7 @@ func TestExpandUnderutilizedVolume_attachedVolume(t *testing.T) {
 			},
 		},
 	}
-	ctx := context.TODO()
+	ctx := context.Background()
 	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
@@ -154,7 +158,7 @@ func TestExpandUnderutilizedVolume_attachedVolume(t *testing.T) {
 	underutilizedVolume := expandUnderutilizedVolume(conn, volume, dataPoints)
 
 	if underutilizedVolume != (UnderutilizedEBSVolumes{}) {
-		t.Fatal(`Volume data present when Volume is attached.`)
+		create.TestFailureNonEmptyStruct(t)
 	}
 }
 
@@ -210,7 +214,7 @@ func TestExpandUnderutilizedVolume_activeVolume(t *testing.T) {
 			},
 		},
 	}
-	ctx := context.TODO()
+	ctx := context.Background()
 	cfg, err := config.LoadDefaultConfig(ctx, config.WithRegion("us-east-1"))
 	if err != nil {
 		log.Fatalf("unable to load SDK config, %v", err)
@@ -219,7 +223,7 @@ func TestExpandUnderutilizedVolume_activeVolume(t *testing.T) {
 	underutilizedVolume := expandUnderutilizedVolume(conn, volume, dataPoints)
 
 	if underutilizedVolume != (UnderutilizedEBSVolumes{}) {
-		t.Fatal(`Volume data present when Volume is active.`)
+		create.TestFailureNonEmptyStruct(t)
 	}
 }
 
