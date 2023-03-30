@@ -53,12 +53,12 @@ func BuildChecksMap() map[string]interface{} {
 ```
 2. A file containing the logic and structures of the check located in the `internal/<cloud_provider>/<check_category/` directory. This file requires you define the following:
     - A constant for field defined in the common Check structure defined in `internal/common/common.go`. 
-    - A struct containing the fields for the particular check.
-    - A struct with the combination of the cental check strict and a list of the check struct.
-    - A `List()` method defined for your Check Struct. This Method must set the common check values to the defined constants and return the structure. (This is currently enforced with a unit test.)
-    - A `Run()` method defined for your Check Struct. This Method contains the logic for performing the check and building the Check object and returning the object to the runner. (This is currently enforced with a unit test.)
-    - A seperate or multiple seperate `expand` function for any logic performed for the check. We seperate this logic out from API calls in order to allow for easier unit testing. 
-3. A `_test` file containing unit tests for any `expand` functions defined for your check. These checks should include multiple cases to ensure your expand funciton is operating as inteded. 
+    - A structure containing the fields for the particular check.
+    - A structure with the combination of the cental check strict and a list of the check structure.
+    - A `List()` method defined for your Check structure. This Method must set the common check values to the defined constants and return the structure. (This is currently enforced with a unit test.)
+    - A `Run()` method defined for your Check structure. This Method contains the logic for performing the check and building the Check object and returning the object to the runner. (This is currently enforced with a unit test.)
+    - A separate or multiple separate `expand` function for any logic performed for the check. We separate this logic out from API calls in order to allow for easier unit testing. 
+3. A `_test` file containing unit tests for any `expand` functions defined for your check. These checks should include multiple cases to ensure your expand function is operating as intended. 
 
 ## How Can I Contribute?
 

@@ -25,14 +25,56 @@ Please refer to our [Contributors Guide](CONTRIBUTORS.md)
 
 Documentation is currently a work in progress. This README will contain the majority of the documentation for now. 
 
-Currently to run the available checks:
+To install the latest version of CKIA, download the correct package for your operating system and architecture from the latest release. Below is an example for automating this process for Linux. Modify this to match your OS and architecture:
 
-1. clone the repo.
-2. ensure you have aws credentials configured.
-3. run the main.go file with the needed subcommands.
-
+```shell
+LATEST_VERSION=$(wget -O - "https://api.github.com/repos/brittandeyoung/ckia/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/' | cut -c 2-)
+wget "https://github.com/brittandeyoung/ckia/releases/download/v${LATEST_VERSION}/ckia_${LATEST_VERSION}_Linux_amd64.tar.gz"
+tar xzf ckia_${LATEST_VERSION}_Linux_amd64.tar.gz
+chmod +x ckia
+sudo mv ckia /usr/local/bin
 ```
-go run main.go aws check
+
+Then you can run the application:
+
+```shell
+✗ ckia
+An open source tool for making recommendations for target cloud account.
+
+Usage:
+  ckia [command]
+
+Available Commands:
+  aws         Checks related to the aws cloud.
+  completion  Generate the autocompletion script for the specified shell
+  help        Help about any command
+
+Flags:
+      --config string   config file (default is $HOME/.ckia.yaml)
+  -h, --help            help for ckia
+
+Use "ckia [command] --help" for more information about a command.
+```
+
+```shell
+✗ ckia aws -h
+Checks related to the aws cloud.
+
+Usage:
+  ckia aws [flags]
+  ckia aws [command]
+
+Available Commands:
+  check       Run available checks for aws
+  list        List available checks for aws
+
+Flags:
+  -h, --help   help for aws
+
+Global Flags:
+      --config string   config file (default is $HOME/.ckia.yaml)
+
+Use "ckia aws [command] --help" for more information about a command.
 ```
 
 ## License

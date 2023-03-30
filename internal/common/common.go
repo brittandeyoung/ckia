@@ -27,15 +27,14 @@ func PrettyString(str string) (string, error) {
 func Call(funcName string, checksMap map[string]interface{}, method string, params ...interface{}) (result interface{}, err error) {
 	f := reflect.ValueOf(checksMap[funcName]).MethodByName(method)
 	if len(params) != f.Type().NumIn() {
-		err = errors.New("The number of params is out of index.")
+		err = errors.New("the number of params is out of index")
 		return
 	}
 	in := make([]reflect.Value, len(params))
 	for k, param := range params {
 		in[k] = reflect.ValueOf(param)
 	}
-	var res []reflect.Value
-	res = f.Call(in)
+	res := f.Call(in)
 	result = res[0].Interface()
 	return
 }
