@@ -19,7 +19,7 @@ We are currently focused on duplicating the AWS Trusted advisor checks, but are 
 
 # Contributing
 
-Please refer to our [Contributors Guide](CONTRIBUTORS.md)
+Please refer to our [Contributors Guide](CONTRIBUTING.md)
 
 # Installation Guide
 
