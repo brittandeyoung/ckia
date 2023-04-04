@@ -86,6 +86,14 @@ Global Flags:
 Use "ckia aws [command] --help" for more information about a command.
 ```
 
+When running checks for the AWS cloud, be sure to configure your credentials before running the application:
+
+```shell
+export AWS_ACCESS_KEY_ID="anaccesskey"
+export AWS_SECRET_ACCESS_KEY="asecretkey"
+export AWS_REGION="us-west-2"
+ckia aws check
+```
 ## License
 
 [Mozilla Public License v2.0](https://github.com/brittandeyoung/ckia/blob/main/LICENSE)
