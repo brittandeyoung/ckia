@@ -1,15 +1,24 @@
 # CKIA
 [![Contributor Covenant](https://img.shields.io/badge/Contributor%20Covenant-2.1-4baaaa.svg)](code_of_conduct.md)
 > **Warning**
-> This project is currently a very early Work In Progress.
+> This project is currently a very early Work In Progress. Please pay attention to releases for potential breaking changes. At this time we are not providing Cost Savings Estimations, we are still working out how to best provide these numbers in the most accurate manner with the given AWS apis. 
 
 \[SEE\] + \[KEE\] + \[UH\]
 
-ckia (cloud know it all) is a open source command line tool that is intended to run opinionated checks against your cloud environment and provide recommendations. The full suite of AWS trusted advisor checks is the inspiration for this project, but we intend to support many cloud providers when the product has fully matured. 
+ckia (cloud know it all) is a open source command line tool that is intended to run opinionated checks against your cloud environment and provide recommendations. The full suite of AWS trusted advisor checks is the inspiration for this project, but we intend to support many cloud providers when the product has fully matured. Our current focus is providing check parity with the current AWS Trusted Advisor offerings. 
 
 The key features of CKIA are:
 
-- **Cloud Auditing**: Audit your cloud configuration for best practices, cost optimizations, performance Improvements, security misconfigurations, Fault Tolerance recommendation, and Service limits. 
+- **Cloud Auditing and Recomendations**: Audit your cloud configuration for:
+
+1. best practices
+2. cost optimizations
+3. performance Improvements
+4. security misconfigurations
+5. Fault Tolerance recommendation
+6. Service limits
+
+Each Check additionally provides recommended actions for when a check is failing. 
 
 # Available Checks
 
