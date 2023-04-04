@@ -19,14 +19,14 @@ const (
 	UnassociatedElasticIPAddressesCheckAdditionalResources = "See comparable AWS Trusted advisor check: https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html#unassociated-elastic-ip-addresses"
 )
 
-type UnassociatedElasticIPAddresses struct {
+type UnassociatedElasticIPAddress struct {
 	Region    string `json:"region"`
-	IpAddress string `json:"ipAddress`
+	IPAddress string `json:"IPAddress`
 }
 
 type UnassociatedElasticIPAddressesCheck struct {
 	common.Check
-	UnassociatedElasticIPAddresses []UnassociatedElasticIPAddresses `json:"unassociatedAddresses"`
+	UnassociatedElasticIPAddresses []UnassociatedElasticIPAddress `json:"unassociatedAddresses"`
 }
 
 func (v UnassociatedElasticIPAddressesCheck) List() *UnassociatedElasticIPAddressesCheck {
@@ -57,12 +57,12 @@ func (v UnassociatedElasticIPAddressesCheck) Run(ctx context.Context, conn clien
 		return nil, nil
 	}
 
-	var unassociatedAddresses []UnassociatedElasticIPAddresses
+	var unassociatedAddresses []UnassociatedElasticIPAddress
 	for _, address := range out.Addresses {
 
 		unassociatedAddress := expandUnassociatedAddress(conn, address)
 
-		if unassociatedAddress.IpAddress != "" {
+		if unassociatedAddress.IPAddress != "" {
 			unassociatedAddresses = append(unassociatedAddresses, unassociatedAddress)
 
 		}
@@ -72,11 +72,11 @@ func (v UnassociatedElasticIPAddressesCheck) Run(ctx context.Context, conn clien
 	return check, nil
 }
 
-func expandUnassociatedAddress(conn client.AWSClient, address types.Address) UnassociatedElasticIPAddresses {
-	var unassociatedAddress UnassociatedElasticIPAddresses
+func expandUnassociatedAddress(conn client.AWSClient, address types.Address) UnassociatedElasticIPAddress {
+	var unassociatedAddress UnassociatedElasticIPAddress
 	if address.AssociationId == nil {
 		unassociatedAddress.Region = conn.Region
-		unassociatedAddress.IpAddress = aws.ToString(address.PublicIp)
+		unassociatedAddress.IPAddress = aws.ToString(address.PublicIp)
 	}
 	return unassociatedAddress
 }

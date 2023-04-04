@@ -8,17 +8,18 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch"
 	"github.com/aws/aws-sdk-go-v2/service/cloudwatch/types"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
+	rdsTypes "github.com/aws/aws-sdk-go-v2/service/rds/types"
 	"github.com/brittandeyoung/ckia/internal/client"
 	"github.com/brittandeyoung/ckia/internal/common"
 )
 
 const (
-	IdleDBInstanceCheckId                  = "ckia:aws:cost:IdleDBInstance"
-	IdleDBInstanceCheckName                = "RDS Idle DB Instances"
-	IdleDBInstanceCheckDescription         = "Checks the configuration of your Amazon Relational Database Service (Amazon RDS) for any DB instances that appear to be idle. If a DB instance has not had a connection for a prolonged period of time, you can delete the instance to reduce costs. If persistent storage is needed for data on the instance, you can use lower-cost options such as taking and retaining a DB snapshot. Manually created DB snapshots are retained until you delete them."
-	IdleDBInstanceCheckCriteria            = "Any RDS DB instance that has not had a connection in the last 7 days is considered idle."
-	IdleDBInstanceCheckRecommendedAction   = "Consider taking a snapshot of the idle DB instance and then either stopping it or deleting it. Stopping the DB instance removes some of the costs for it, but does not remove storage costs. A stopped instance keeps all automated backups based upon the configured retention period. Stopping a DB instance usually incurs additional costs when compared to deleting the instance and then retaining only the final snapshot."
-	IdleDBInstanceCheckAdditionalResources = "See comparable AWS Trusted advisor check: https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html#amazon-rds-idle-dbs-instances"
+	IdleDBInstancesCheckId                  = "ckia:aws:cost:IdleDBInstances"
+	IdleDBInstancesCheckName                = "RDS Idle DB Instances"
+	IdleDBInstancesCheckDescription         = "Checks the configuration of your Amazon Relational Database Service (Amazon RDS) for any DB instances that appear to be idle. If a DB instance has not had a connection for a prolonged period of time, you can delete the instance to reduce costs. If persistent storage is needed for data on the instance, you can use lower-cost options such as taking and retaining a DB snapshot. Manually created DB snapshots are retained until you delete them."
+	IdleDBInstancesCheckCriteria            = "Any RDS DB instance that has not had a connection in the last 7 days is considered idle."
+	IdleDBInstancesCheckRecommendedAction   = "Consider taking a snapshot of the idle DB instance and then either stopping it or deleting it. Stopping the DB instance removes some of the costs for it, but does not remove storage costs. A stopped instance keeps all automated backups based upon the configured retention period. Stopping a DB instance usually incurs additional costs when compared to deleting the instance and then retaining only the final snapshot."
+	IdleDBInstancesCheckAdditionalResources = "See comparable AWS Trusted advisor check: https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html#amazon-rds-idle-dbs-instances"
 )
 
 type IdleDBInstance struct {
@@ -31,43 +32,51 @@ type IdleDBInstance struct {
 	EstimatedMonthlySavings int    `json:"estimatedMonthlySavings"`
 }
 
-type IdleDBInstanceCheck struct {
+type IdleDBInstancesCheck struct {
 	common.Check
 	IdleDBInstances []IdleDBInstance `json:"idleDBInstances"`
 }
 
-func (v IdleDBInstanceCheck) List() *IdleDBInstanceCheck {
-	check := &IdleDBInstanceCheck{
+func (v IdleDBInstancesCheck) List() *IdleDBInstancesCheck {
+	check := &IdleDBInstancesCheck{
 		Check: common.Check{
-			Id:                  IdleDBInstanceCheckId,
-			Name:                IdleDBInstanceCheckName,
-			Description:         IdleDBInstanceCheckDescription,
-			Criteria:            IdleDBInstanceCheckCriteria,
-			RecommendedAction:   IdleDBInstanceCheckRecommendedAction,
-			AdditionalResources: IdleDBInstanceCheckAdditionalResources,
+			Id:                  IdleDBInstancesCheckId,
+			Name:                IdleDBInstancesCheckName,
+			Description:         IdleDBInstancesCheckDescription,
+			Criteria:            IdleDBInstancesCheckCriteria,
+			RecommendedAction:   IdleDBInstancesCheckRecommendedAction,
+			AdditionalResources: IdleDBInstancesCheckAdditionalResources,
 		},
 	}
 	return check
 }
 
-func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) (*IdleDBInstanceCheck, error) {
-	check := new(IdleDBInstanceCheck).List()
+func (v IdleDBInstancesCheck) Run(ctx context.Context, conn client.AWSClient) (*IdleDBInstancesCheck, error) {
+	check := new(IdleDBInstancesCheck).List()
 
 	currentTime := time.Now()
 
 	in := &rds.DescribeDBInstancesInput{}
-	out, err := conn.RDS.DescribeDBInstances(ctx, in)
+	var dbInstances []rdsTypes.DBInstance
 
-	if err != nil {
-		return nil, err
+	paginator := rds.NewDescribeDBInstancesPaginator(conn.RDS, in, func(o *rds.DescribeDBInstancesPaginatorOptions) {})
+
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(ctx)
+
+		if err != nil {
+			return nil, err
+		}
+		dbInstances = append(dbInstances, output.DBInstances...)
+
 	}
 
-	if len(out.DBInstances) == 0 {
+	if len(dbInstances) == 0 {
 		return nil, nil
 	}
 
 	var idleDBInstances []IdleDBInstance
-	for _, dbInstance := range out.DBInstances {
+	for _, dbInstance := range dbInstances {
 
 		metrics, err := conn.Cloudwatch.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 			MetricName: aws.String("DatabaseConnections"),
@@ -139,7 +148,7 @@ func (v IdleDBInstanceCheck) Run(ctx context.Context, conn client.AWSClient) (*I
 			// pricingData, err := pricingSvc.GetProducts(ctx, pricingIn)
 
 			// if err != nil {
-			// 	return IdleDBInstanceCheck{}
+			// 	return IdleDBInstancesCheck{}
 			// }
 
 			idleDBInstance.DBInstanceName = aws.ToString(dbInstance.DBInstanceIdentifier)

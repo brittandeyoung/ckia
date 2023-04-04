@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -28,11 +27,11 @@ var checkCmd = &cobra.Command{
 	Use:   "check",
 	Short: "Run available checks for aws",
 	Long:  `Run available opinionated checks for aws cloud.`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		ctx := context.Background()
 		cfg, err := config.LoadDefaultConfig(ctx)
 		if err != nil {
-			log.Fatalf("unable to load SDK config, %v", err)
+			return err
 		}
 		conn := client.InitiateClient(cfg)
 
@@ -42,7 +41,7 @@ var checkCmd = &cobra.Command{
 			if strings.Contains(k, "aws:cost") {
 				res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
 				if err != nil {
-					log.Fatal(err)
+					return err
 				}
 				if res != nil {
 					allChecks.CostOptimization = append(allChecks.CostOptimization, res)
@@ -51,7 +50,7 @@ var checkCmd = &cobra.Command{
 			if strings.Contains(k, "aws:security") {
 				res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
 				if err != nil {
-					log.Fatal(err)
+					return err
 				}
 				if res != nil {
 					allChecks.Security = append(allChecks.Security, res)
@@ -65,9 +64,10 @@ var checkCmd = &cobra.Command{
 		}
 		resp, err := common.PrettyString(string(json))
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		fmt.Println(resp)
+		return nil
 	},
 }
 

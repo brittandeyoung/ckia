@@ -3,7 +3,6 @@ package aws
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"strings"
 
 	"github.com/brittandeyoung/ckia/cmd"
@@ -17,7 +16,7 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List available checks for aws",
 	Long:  `List the available opinionated checks for aws cloud.`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		allChecks := Checks{}
 		checksMap := internalAws.BuildChecksMap()
 		for k := range checksMap {
@@ -40,9 +39,10 @@ var listCmd = &cobra.Command{
 		}
 		resp, err := common.PrettyString(string(json))
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 		fmt.Println(resp)
+		return nil
 	},
 }
 
