@@ -29,11 +29,11 @@ func TestExpandUnassociatedAddress_basic(t *testing.T) {
 
 	unassociatedAddress := expandUnassociatedAddress(conn, address)
 
-	if unassociatedAddress == (UnassociatedElasticIPAddresses{}) {
+	if unassociatedAddress == (UnassociatedElasticIPAddress{}) {
 		create.TestFailureEmptyStruct(t)
 	}
 
-	if unassociatedAddress.IpAddress != "18.214.64.132" {
+	if unassociatedAddress.IPAddress != "18.214.64.132" {
 		t.Fatalf(`IP Address field not set properly.`)
 	}
 
@@ -60,7 +60,7 @@ func TestExpandUnassociatedAddress_none(t *testing.T) {
 
 	unassociatedAddress := expandUnassociatedAddress(conn, address)
 
-	if unassociatedAddress != (UnassociatedElasticIPAddresses{}) {
+	if unassociatedAddress != (UnassociatedElasticIPAddress{}) {
 		create.TestFailureNonEmptyStruct(t)
 	}
 }

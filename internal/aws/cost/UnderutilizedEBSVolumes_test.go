@@ -74,7 +74,7 @@ func TestExpandUnderutilizedVolume_basic(t *testing.T) {
 	conn := client.InitiateClient(cfg)
 	underutilizedVolume := expandUnderutilizedVolume(conn, volume, dataPoints)
 
-	if underutilizedVolume == (UnderutilizedEBSVolumes{}) {
+	if underutilizedVolume == (UnderutilizedEBSVolume{}) {
 		create.TestFailureNonEmptyStruct(t)
 	}
 	if underutilizedVolume.Region != "us-east-1" {
@@ -157,7 +157,7 @@ func TestExpandUnderutilizedVolume_attachedVolume(t *testing.T) {
 	conn := client.InitiateClient(cfg)
 	underutilizedVolume := expandUnderutilizedVolume(conn, volume, dataPoints)
 
-	if underutilizedVolume != (UnderutilizedEBSVolumes{}) {
+	if underutilizedVolume != (UnderutilizedEBSVolume{}) {
 		create.TestFailureNonEmptyStruct(t)
 	}
 }
@@ -222,7 +222,7 @@ func TestExpandUnderutilizedVolume_activeVolume(t *testing.T) {
 	conn := client.InitiateClient(cfg)
 	underutilizedVolume := expandUnderutilizedVolume(conn, volume, dataPoints)
 
-	if underutilizedVolume != (UnderutilizedEBSVolumes{}) {
+	if underutilizedVolume != (UnderutilizedEBSVolume{}) {
 		create.TestFailureNonEmptyStruct(t)
 	}
 }
@@ -240,7 +240,7 @@ func TestExpandSnapshot_basic(t *testing.T) {
 			},
 		},
 	}
-	var underutilizedVolume UnderutilizedEBSVolumes
+	var underutilizedVolume UnderutilizedEBSVolume
 	underutilizedVolume = expandSnapshot(snapshots, underutilizedVolume)
 
 	if underutilizedVolume.SnapshotAge != 8 {

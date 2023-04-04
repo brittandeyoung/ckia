@@ -10,7 +10,8 @@ type checkMapping map[string]interface{}
 func BuildChecksMap() map[string]interface{} {
 	checksMap := checkMapping{
 		// Cost Checks go here
-		cost.IdleDBInstanceCheckId:                 new(cost.IdleDBInstanceCheck),
+		cost.IdleDBInstancesCheckId:                new(cost.IdleDBInstancesCheck),
+		cost.IdleLoadBalancersCheckId:              new(cost.IdleLoadBalancersCheck),
 		cost.UnderutilizedEBSVolumesCheckId:        new(cost.UnderutilizedEBSVolumesCheck),
 		cost.UnassociatedElasticIPAddressesCheckId: new(cost.UnassociatedElasticIPAddressesCheck),
 		// Security checks go here

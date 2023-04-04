@@ -41,7 +41,7 @@ The checks for each cloud provider have the following required structure:
 func BuildChecksMap() map[string]interface{} {
 	checksMap := checkMapping{
 		// Cost Checks go here
-		cost.IdleDBInstanceCheckId:          new(cost.IdleDBInstanceCheck),
+		cost.IdleDBInstancesCheckId:          new(cost.IdleDBInstancesCheck),
 		cost.UnderutilizedEBSVolumesCheckId: new(cost.UnderutilizedEBSVolumesCheck),
 		// Security checks go here
 		security.RootAccountMFACheckId: new(security.RootAccountMFACheck),

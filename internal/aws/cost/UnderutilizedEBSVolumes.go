@@ -22,7 +22,7 @@ const (
 	UnderutilizedEBSVolumesCheckAdditionalResources = "See comparable AWS Trusted advisor check: https://docs.aws.amazon.com/awssupport/latest/user/cost-optimization-checks.html#underutilized-amazon-ebs-volumes"
 )
 
-type UnderutilizedEBSVolumes struct {
+type UnderutilizedEBSVolume struct {
 	Region             string `json:"region"`
 	VolumeId           string `json:"volumeId"`
 	VolumeName         string `json:"volumeName"`
@@ -36,7 +36,7 @@ type UnderutilizedEBSVolumes struct {
 
 type UnderutilizedEBSVolumesCheck struct {
 	common.Check
-	UnderutilizedEBSVolumes []UnderutilizedEBSVolumes `json:"underutilizedVolumes"`
+	UnderutilizedEBSVolumes []UnderutilizedEBSVolume `json:"underutilizedVolumes"`
 }
 
 func (v UnderutilizedEBSVolumesCheck) List() *UnderutilizedEBSVolumesCheck {
@@ -59,20 +59,28 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 	currentTime := time.Now()
 
 	in := &ec2.DescribeVolumesInput{}
-	out, err := conn.EC2.DescribeVolumes(ctx, in)
+	var volumes []types.Volume
 
-	if err != nil {
-		return nil, err
+	paginator := ec2.NewDescribeVolumesPaginator(conn.EC2, in, func(o *ec2.DescribeVolumesPaginatorOptions) {})
+
+	for paginator.HasMorePages() {
+		output, err := paginator.NextPage(ctx)
+
+		if err != nil {
+			return nil, err
+		}
+		volumes = append(volumes, output.Volumes...)
+
 	}
 
-	if len(out.Volumes) == 0 {
+	if len(volumes) == 0 {
 		return nil, nil
 	}
 
-	var underutilizedVolumes []UnderutilizedEBSVolumes
-	for _, volume := range out.Volumes {
+	var underutilizedVolumes []UnderutilizedEBSVolume
+	for _, volume := range volumes {
 
-		var underutilizedVolume UnderutilizedEBSVolumes
+		var underutilizedVolume UnderutilizedEBSVolume
 
 		metrics, err := conn.Cloudwatch.GetMetricStatistics(ctx, &cloudwatch.GetMetricStatisticsInput{
 			MetricName: aws.String("VolumeReadOps"),
@@ -118,8 +126,8 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 	return check, nil
 }
 
-func expandUnderutilizedVolume(conn client.AWSClient, volume types.Volume, dataPoints []cloudWatchTypes.Datapoint) UnderutilizedEBSVolumes {
-	var underutilizedVolume UnderutilizedEBSVolumes
+func expandUnderutilizedVolume(conn client.AWSClient, volume types.Volume, dataPoints []cloudWatchTypes.Datapoint) UnderutilizedEBSVolume {
+	var underutilizedVolume UnderutilizedEBSVolume
 	iopsFound := false
 	for _, dataPoint := range dataPoints {
 		if aws.ToFloat64(dataPoint.Average) != 0 {
@@ -141,7 +149,7 @@ func expandUnderutilizedVolume(conn client.AWSClient, volume types.Volume, dataP
 	return underutilizedVolume
 }
 
-func expandSnapshot(snapshots []types.Snapshot, volume UnderutilizedEBSVolumes) UnderutilizedEBSVolumes {
+func expandSnapshot(snapshots []types.Snapshot, volume UnderutilizedEBSVolume) UnderutilizedEBSVolume {
 	if len(snapshots) > 0 {
 		snapshot := snapshots[0]
 		duration := time.Since(aws.ToTime(snapshot.StartTime))
