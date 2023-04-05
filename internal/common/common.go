@@ -38,3 +38,13 @@ func Call(funcName string, checksMap map[string]interface{}, method string, para
 	result = res[0].Interface()
 	return
 }
+
+func StringSliceContains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
+		}
+	}
+
+	return false
+}

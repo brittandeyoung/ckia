@@ -22,6 +22,9 @@ type Checks struct {
 	ServiceLimits    []interface{} `json:"serviceLimits"`
 }
 
+var includeChecks []string
+var excludeChecks []string
+
 // checkCmd represents the check command
 var checkCmd = &cobra.Command{
 	Use:   "check",
@@ -34,26 +37,27 @@ var checkCmd = &cobra.Command{
 			return err
 		}
 		conn := client.InitiateClient(cfg)
-
 		allChecks := Checks{}
 		checksMap := internalAws.BuildChecksMap()
 		for k := range checksMap {
-			if strings.Contains(k, "aws:cost") {
-				res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
-				if err != nil {
-					return err
+			if (len(includeChecks) > 0 && common.StringSliceContains(includeChecks, k)) || (len(excludeChecks) > 0 && !common.StringSliceContains(excludeChecks, k)) {
+				if strings.Contains(k, "aws:cost") {
+					res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+					if err != nil {
+						return err
+					}
+					if res != nil {
+						allChecks.CostOptimization = append(allChecks.CostOptimization, res)
+					}
 				}
-				if res != nil {
-					allChecks.CostOptimization = append(allChecks.CostOptimization, res)
-				}
-			}
-			if strings.Contains(k, "aws:security") {
-				res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
-				if err != nil {
-					return err
-				}
-				if res != nil {
-					allChecks.Security = append(allChecks.Security, res)
+				if strings.Contains(k, "aws:security") {
+					res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+					if err != nil {
+						return err
+					}
+					if res != nil {
+						allChecks.Security = append(allChecks.Security, res)
+					}
 				}
 			}
 		}
@@ -73,4 +77,6 @@ var checkCmd = &cobra.Command{
 
 func init() {
 	cmd.AwsCmd.AddCommand(checkCmd)
+	checkCmd.Flags().StringSliceVarP(&includeChecks, "include-checks", "i", []string{}, "A list of all the checks you wish to run.")
+	checkCmd.Flags().StringSliceVarP(&excludeChecks, "exclude-checks", "e", []string{}, "A list of checks to exclude from running.")
 }
