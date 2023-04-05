@@ -12,7 +12,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/pricing v1.19.2
 	github.com/aws/aws-sdk-go-v2/service/rds v1.42.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.18.7
-	github.com/spf13/cobra v1.6.1
+	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
 )
 
