@@ -11,6 +11,7 @@ import (
 	internalAws "github.com/brittandeyoung/ckia/internal/aws"
 	"github.com/brittandeyoung/ckia/internal/client"
 	"github.com/brittandeyoung/ckia/internal/common"
+	"github.com/smirzaei/parallel"
 	"github.com/spf13/cobra"
 )
 
@@ -39,10 +40,14 @@ var checkCmd = &cobra.Command{
 		conn := client.InitiateClient(cfg)
 		allChecks := Checks{}
 		checksMap := internalAws.BuildChecksMap()
+		checksList := []string{}
 		for k := range checksMap {
-			if (len(includeChecks) > 0 && common.StringSliceContains(includeChecks, k)) || (len(excludeChecks) > 0 && !common.StringSliceContains(excludeChecks, k)) {
+			checksList = append(checksList, k)
+		}
+		errors := parallel.Map(checksList, func(k string) error {
+			if (len(includeChecks) > 0 && common.StringSliceContains(includeChecks, k)) || (len(excludeChecks) > 0 && !common.StringSliceContains(excludeChecks, k)) || (len(includeChecks) == 0 && len(excludeChecks) == 0) {
 				if strings.Contains(k, "aws:cost") {
-					res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+					res, _ := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
 					if err != nil {
 						return err
 					}
@@ -51,7 +56,7 @@ var checkCmd = &cobra.Command{
 					}
 				}
 				if strings.Contains(k, "aws:security") {
-					res, err := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
+					res, _ := common.Call(k, checksMap, common.MethodNameRun, ctx, conn)
 					if err != nil {
 						return err
 					}
@@ -59,6 +64,13 @@ var checkCmd = &cobra.Command{
 						allChecks.Security = append(allChecks.Security, res)
 					}
 				}
+			}
+			return nil
+		})
+
+		for _, err := range errors {
+			if err != nil {
+				return err
 			}
 		}
 

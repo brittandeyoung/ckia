@@ -13,6 +13,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/rds v1.42.0
 	github.com/aws/aws-sdk-go-v2/service/sts v1.18.7
 	github.com/spf13/cobra v1.7.0
+	github.com/smirzaei/parallel v1.1.0
 	github.com/spf13/viper v1.15.0
 )
 
