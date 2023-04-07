@@ -10,10 +10,10 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2 v1.19.7
 	github.com/aws/aws-sdk-go-v2/service/iam v1.19.8
 	github.com/aws/aws-sdk-go-v2/service/pricing v1.19.2
-	github.com/aws/aws-sdk-go-v2/service/rds v1.42.0
+	github.com/aws/aws-sdk-go-v2/service/rds v1.42.1
 	github.com/aws/aws-sdk-go-v2/service/sts v1.18.7
-	github.com/spf13/cobra v1.7.0
 	github.com/smirzaei/parallel v1.1.0
+	github.com/spf13/cobra v1.7.0
 	github.com/spf13/viper v1.15.0
 )
 
