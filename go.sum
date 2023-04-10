@@ -62,8 +62,8 @@ github.com/aws/aws-sdk-go-v2/service/iam v1.19.9 h1:8Rg6u2E4iogo0wPRgNkM0V0GtiNE
 github.com/aws/aws-sdk-go-v2/service/iam v1.19.9/go.mod h1:KeyeWNh9U2iztqp7JsK2PvnAupYWNZFp8A6ItqAQay4=
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.26 h1:uUt4XctZLhl9wBE1L8lobU3bVN8SNUP7T+olb0bWBO4=
 github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.9.26/go.mod h1:Bd4C/4PkVGubtNe5iMXu5BNnaBi/9t/UsFspPt4ram8=
-github.com/aws/aws-sdk-go-v2/service/pricing v1.19.3 h1:eHvvTEcXodIV7NoPKECmrSZfY5Hd0tBF/c8QyZz0XEM=
-github.com/aws/aws-sdk-go-v2/service/pricing v1.19.3/go.mod h1:b4LChYCO5bJncrsbIi35HdaspL4ZB+bbbhvgShBSnSA=
+github.com/aws/aws-sdk-go-v2/service/pricing v1.19.4 h1:JCnR58MPko04Qdc9eac7+I73NmZ4KiwakYVL11Hwt8g=
+github.com/aws/aws-sdk-go-v2/service/pricing v1.19.4/go.mod h1:b4LChYCO5bJncrsbIi35HdaspL4ZB+bbbhvgShBSnSA=
 github.com/aws/aws-sdk-go-v2/service/rds v1.42.2 h1:SrBMXHdAftLm0TGcr5ZdCOmEjcZFrDVXTwgJp1DTDas=
 github.com/aws/aws-sdk-go-v2/service/rds v1.42.2/go.mod h1:MsNKuqHhTJrmI6A0TBdhSYiQ7SYkKncIWRIp9KfzRfs=
 github.com/aws/aws-sdk-go-v2/service/sso v1.12.7 h1:rrYYhsvcvg6CDDoo4GHKtAWBFutS86CpmGvqHJHYL9w=
