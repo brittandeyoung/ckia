@@ -6,8 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- **New Flag** `aws check --exclude-checks` [#49](https://github.com/brittandeyoung/ckia/issues/49)
-- **New Flag** `aws check --include-checks` [#49](https://github.com/brittandeyoung/ckia/issues/49)
+- **New:** `Add progress bar when running checks.` [#57](https://github.com/brittandeyoung/ckia/issues/57)
+- **New Flag:** `aws check --exclude-checks` [#49](https://github.com/brittandeyoung/ckia/issues/49)
+- **New Flag:** `aws check --include-checks` [#49](https://github.com/brittandeyoung/ckia/issues/49)
 
 ## [0.1.0] - 2023-04-04
 ### Added
