@@ -21,7 +21,7 @@ const (
 
 type UnassociatedElasticIPAddress struct {
 	Region    string `json:"region"`
-	IPAddress string `json:"IPAddress`
+	IPAddress string `json:"IPAddress"`
 }
 
 type UnassociatedElasticIPAddressesCheck struct {

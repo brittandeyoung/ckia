@@ -11,6 +11,8 @@ import (
 	internalAws "github.com/brittandeyoung/ckia/internal/aws"
 	"github.com/brittandeyoung/ckia/internal/client"
 	"github.com/brittandeyoung/ckia/internal/common"
+	"github.com/k0kubun/go-ansi"
+	"github.com/schollz/progressbar/v3"
 	"github.com/smirzaei/parallel"
 	"github.com/spf13/cobra"
 )
@@ -44,6 +46,20 @@ var checkCmd = &cobra.Command{
 		for k := range checksMap {
 			checksList = append(checksList, k)
 		}
+		bar := progressbar.NewOptions(len(checksList),
+			progressbar.OptionSetWriter(ansi.NewAnsiStdout()),
+			progressbar.OptionEnableColorCodes(true),
+			progressbar.OptionFullWidth(),
+			progressbar.OptionShowCount(),
+			progressbar.OptionShowElapsedTimeOnFinish(),
+			progressbar.OptionSetDescription(fmt.Sprintf("Running [cyan][%d][reset] ckia Checks...", len(checksList))),
+			progressbar.OptionSetTheme(progressbar.Theme{
+				Saucer:        "[green]=[reset]",
+				SaucerHead:    "[green]>[reset]",
+				SaucerPadding: " ",
+				BarStart:      "[",
+				BarEnd:        "]",
+			}))
 		errors := parallel.Map(checksList, func(k string) error {
 			if (len(includeChecks) > 0 && common.StringSliceContains(includeChecks, k)) || (len(excludeChecks) > 0 && !common.StringSliceContains(excludeChecks, k)) || (len(includeChecks) == 0 && len(excludeChecks) == 0) {
 				if strings.Contains(k, "aws:cost") {
@@ -65,6 +81,7 @@ var checkCmd = &cobra.Command{
 					}
 				}
 			}
+			bar.Add(1)
 			return nil
 		})
 
@@ -78,6 +95,7 @@ var checkCmd = &cobra.Command{
 		if err != nil {
 			fmt.Print("An Error happened when marshaling json")
 		}
+		fmt.Println()
 		resp, err := common.PrettyString(string(json))
 		if err != nil {
 			return err
