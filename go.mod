@@ -11,7 +11,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/iam v1.19.9
 	github.com/aws/aws-sdk-go-v2/service/pricing v1.19.3
 	github.com/aws/aws-sdk-go-v2/service/rds v1.42.2
-	github.com/aws/aws-sdk-go-v2/service/sts v1.18.8
+	github.com/aws/aws-sdk-go-v2/service/sts v1.18.9
 	github.com/k0kubun/go-ansi v0.0.0-20180517002512-3bf9e2903213
 	github.com/schollz/progressbar/v3 v3.13.1
 	github.com/smirzaei/parallel v1.1.0
