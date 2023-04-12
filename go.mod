@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/aws/aws-sdk-go-v2 v1.17.8
 	github.com/aws/aws-sdk-go-v2/config v1.18.20
-	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.25.8
+	github.com/aws/aws-sdk-go-v2/service/cloudwatch v1.25.9
 	github.com/aws/aws-sdk-go-v2/service/ec2 v1.93.1
 	github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2 v1.19.8
 	github.com/aws/aws-sdk-go-v2/service/iam v1.19.9
