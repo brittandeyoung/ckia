@@ -14,6 +14,7 @@ func BuildChecksMap() map[string]interface{} {
 		cost.IdleLoadBalancersCheckId:              new(cost.IdleLoadBalancersCheck),
 		cost.UnderutilizedEBSVolumesCheckId:        new(cost.UnderutilizedEBSVolumesCheck),
 		cost.UnassociatedElasticIPAddressesCheckId: new(cost.UnassociatedElasticIPAddressesCheck),
+		cost.HighErrorRateLambdaFunctionsCheckId:   new(cost.HighErrorRateLambdaFunctionsCheck),
 		// Security checks go here
 		security.RootAccountMissingMFACheckId: new(security.RootAccountMissingMFACheck),
 	}
