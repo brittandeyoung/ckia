@@ -5,7 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.2.0] - 2023-04-17
 ### Added
+- **New:** `Add out-format flag.` [#68](https://github.com/brittandeyoung/ckia/issues/68)
+- **New:** `Add out-file flag.` [#68](https://github.com/brittandeyoung/ckia/issues/68)
 - **New:** `Add progress bar when running checks.` [#57](https://github.com/brittandeyoung/ckia/issues/57)
 - **New Flag:** `aws check --exclude-checks` [#49](https://github.com/brittandeyoung/ckia/issues/49)
 - **New Flag:** `aws check --include-checks` [#49](https://github.com/brittandeyoung/ckia/issues/49)
@@ -21,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **New Check:** `ckia:aws:cost:UnderutilizedEBSVolumes` [#9](https://github.com/brittandeyoung/ckia/issues/9)
 - **New Check:** `ckia:aws:cost:IdleDBInstance`
 
-[Unreleased]: https://github.com/brittandeyoung/ckia/compare/v0.1.0..HEAD
+[Unreleased]: https://github.com/brittandeyoung/ckia/compare/v0.2.0..HEAD
+[0.2.0]: https://github.com/brittandeyoung/ckia/compare/v0.1.0..v0.2.0
 [0.1.0]: https://github.com/brittandeyoung/ckia/compare/v0.0.1..v0.1.0
 [0.0.1]: https://github.com/brittandeyoung/ckia/tree/v0.0.1
