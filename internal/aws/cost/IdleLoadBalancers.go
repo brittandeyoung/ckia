@@ -38,22 +38,21 @@ type IdleLoadBalancersCheck struct {
 	IdleLoadBalancers []IdleLoadBalancer `json:"idleLoadBalancers"`
 }
 
-func (v IdleLoadBalancersCheck) List() *IdleLoadBalancersCheck {
-	check := &IdleLoadBalancersCheck{
-		Check: common.Check{
-			Id:                  IdleLoadBalancersCheckId,
-			Name:                IdleLoadBalancersCheckName,
-			Description:         IdleLoadBalancersCheckDescription,
-			Criteria:            IdleLoadBalancersCheckCriteria,
-			RecommendedAction:   IdleLoadBalancersCheckRecommendedAction,
-			AdditionalResources: IdleLoadBalancersCheckAdditionalResources,
-		},
+func (v *IdleLoadBalancersCheck) List() *IdleLoadBalancersCheck {
+	v.Check = common.Check{
+		Id:                  IdleLoadBalancersCheckId,
+		Name:                IdleLoadBalancersCheckName,
+		Description:         IdleLoadBalancersCheckDescription,
+		Criteria:            IdleLoadBalancersCheckCriteria,
+		RecommendedAction:   IdleLoadBalancersCheckRecommendedAction,
+		AdditionalResources: IdleLoadBalancersCheckAdditionalResources,
 	}
-	return check
+
+	return v
 }
 
-func (v IdleLoadBalancersCheck) Run(ctx context.Context, conn client.AWSClient) (*IdleLoadBalancersCheck, error) {
-	check := new(IdleLoadBalancersCheck).List()
+func (v *IdleLoadBalancersCheck) Run(ctx context.Context, conn client.AWSClient) (*IdleLoadBalancersCheck, error) {
+	v = v.List()
 
 	currentTime := time.Now()
 	var loadBalancers []lbTypes.LoadBalancer
@@ -142,8 +141,8 @@ func (v IdleLoadBalancersCheck) Run(ctx context.Context, conn client.AWSClient) 
 
 	}
 
-	check.IdleLoadBalancers = idleLoadBalancers
-	return check, nil
+	v.IdleLoadBalancers = idleLoadBalancers
+	return v, nil
 }
 
 func expandInactiveLoadBalancer(idleLoadBalancer IdleLoadBalancer, descriptions []lbTypes.TargetHealthDescription) (IdleLoadBalancer, bool) {

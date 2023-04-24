@@ -39,22 +39,21 @@ type UnderutilizedEBSVolumesCheck struct {
 	UnderutilizedEBSVolumes []UnderutilizedEBSVolume `json:"underutilizedVolumes"`
 }
 
-func (v UnderutilizedEBSVolumesCheck) List() *UnderutilizedEBSVolumesCheck {
-	check := &UnderutilizedEBSVolumesCheck{
-		Check: common.Check{
-			Id:                  UnderutilizedEBSVolumesCheckId,
-			Name:                UnderutilizedEBSVolumesCheckName,
-			Description:         UnderutilizedEBSVolumesCheckDescription,
-			Criteria:            UnderutilizedEBSVolumesCheckCriteria,
-			RecommendedAction:   UnderutilizedEBSVolumesCheckRecommendedAction,
-			AdditionalResources: UnderutilizedEBSVolumesCheckAdditionalResources,
-		},
+func (v *UnderutilizedEBSVolumesCheck) List() *UnderutilizedEBSVolumesCheck {
+	v.Check = common.Check{
+		Id:                  UnderutilizedEBSVolumesCheckId,
+		Name:                UnderutilizedEBSVolumesCheckName,
+		Description:         UnderutilizedEBSVolumesCheckDescription,
+		Criteria:            UnderutilizedEBSVolumesCheckCriteria,
+		RecommendedAction:   UnderutilizedEBSVolumesCheckRecommendedAction,
+		AdditionalResources: UnderutilizedEBSVolumesCheckAdditionalResources,
 	}
-	return check
+
+	return v
 }
 
-func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSClient) (*UnderutilizedEBSVolumesCheck, error) {
-	check := new(UnderutilizedEBSVolumesCheck).List()
+func (v *UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSClient) (*UnderutilizedEBSVolumesCheck, error) {
+	v = v.List()
 
 	currentTime := time.Now()
 
@@ -122,8 +121,8 @@ func (v UnderutilizedEBSVolumesCheck) Run(ctx context.Context, conn client.AWSCl
 		}
 	}
 
-	check.UnderutilizedEBSVolumes = underutilizedVolumes
-	return check, nil
+	v.UnderutilizedEBSVolumes = underutilizedVolumes
+	return v, nil
 }
 
 func expandUnderutilizedVolume(conn client.AWSClient, volume types.Volume, dataPoints []cloudWatchTypes.Datapoint) UnderutilizedEBSVolume {

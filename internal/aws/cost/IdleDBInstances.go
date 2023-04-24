@@ -37,22 +37,21 @@ type IdleDBInstancesCheck struct {
 	IdleDBInstances []IdleDBInstance `json:"idleDBInstances"`
 }
 
-func (v IdleDBInstancesCheck) List() *IdleDBInstancesCheck {
-	check := &IdleDBInstancesCheck{
-		Check: common.Check{
-			Id:                  IdleDBInstancesCheckId,
-			Name:                IdleDBInstancesCheckName,
-			Description:         IdleDBInstancesCheckDescription,
-			Criteria:            IdleDBInstancesCheckCriteria,
-			RecommendedAction:   IdleDBInstancesCheckRecommendedAction,
-			AdditionalResources: IdleDBInstancesCheckAdditionalResources,
-		},
+func (v *IdleDBInstancesCheck) List() *IdleDBInstancesCheck {
+	v.Check = common.Check{
+		Id:                  IdleDBInstancesCheckId,
+		Name:                IdleDBInstancesCheckName,
+		Description:         IdleDBInstancesCheckDescription,
+		Criteria:            IdleDBInstancesCheckCriteria,
+		RecommendedAction:   IdleDBInstancesCheckRecommendedAction,
+		AdditionalResources: IdleDBInstancesCheckAdditionalResources,
 	}
-	return check
+
+	return v
 }
 
-func (v IdleDBInstancesCheck) Run(ctx context.Context, conn client.AWSClient) (*IdleDBInstancesCheck, error) {
-	check := new(IdleDBInstancesCheck).List()
+func (v *IdleDBInstancesCheck) Run(ctx context.Context, conn client.AWSClient) (*IdleDBInstancesCheck, error) {
+	v = v.List()
 
 	currentTime := time.Now()
 
@@ -164,8 +163,8 @@ func (v IdleDBInstancesCheck) Run(ctx context.Context, conn client.AWSClient) (*
 
 	}
 
-	check.IdleDBInstances = idleDBInstances
-	return check, nil
+	v.IdleDBInstances = idleDBInstances
+	return v, nil
 }
 
 func expandConnections(dataPoints []types.Datapoint) (int, bool) {

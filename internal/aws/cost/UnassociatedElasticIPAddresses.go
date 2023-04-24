@@ -29,22 +29,21 @@ type UnassociatedElasticIPAddressesCheck struct {
 	UnassociatedElasticIPAddresses []UnassociatedElasticIPAddress `json:"unassociatedAddresses"`
 }
 
-func (v UnassociatedElasticIPAddressesCheck) List() *UnassociatedElasticIPAddressesCheck {
-	check := &UnassociatedElasticIPAddressesCheck{
-		Check: common.Check{
-			Id:                  UnassociatedElasticIPAddressesCheckId,
-			Name:                UnassociatedElasticIPAddressesCheckName,
-			Description:         UnassociatedElasticIPAddressesCheckDescription,
-			Criteria:            UnassociatedElasticIPAddressesCheckCriteria,
-			RecommendedAction:   UnassociatedElasticIPAddressesCheckRecommendedAction,
-			AdditionalResources: UnassociatedElasticIPAddressesCheckAdditionalResources,
-		},
+func (v *UnassociatedElasticIPAddressesCheck) List() *UnassociatedElasticIPAddressesCheck {
+	v.Check = common.Check{
+		Id:                  UnassociatedElasticIPAddressesCheckId,
+		Name:                UnassociatedElasticIPAddressesCheckName,
+		Description:         UnassociatedElasticIPAddressesCheckDescription,
+		Criteria:            UnassociatedElasticIPAddressesCheckCriteria,
+		RecommendedAction:   UnassociatedElasticIPAddressesCheckRecommendedAction,
+		AdditionalResources: UnassociatedElasticIPAddressesCheckAdditionalResources,
 	}
-	return check
+
+	return v
 }
 
-func (v UnassociatedElasticIPAddressesCheck) Run(ctx context.Context, conn client.AWSClient) (*UnassociatedElasticIPAddressesCheck, error) {
-	check := new(UnassociatedElasticIPAddressesCheck).List()
+func (v *UnassociatedElasticIPAddressesCheck) Run(ctx context.Context, conn client.AWSClient) (*UnassociatedElasticIPAddressesCheck, error) {
+	v = v.List()
 
 	in := &ec2.DescribeAddressesInput{}
 	out, err := conn.EC2.DescribeAddresses(ctx, in)
@@ -68,8 +67,8 @@ func (v UnassociatedElasticIPAddressesCheck) Run(ctx context.Context, conn clien
 		}
 	}
 
-	check.UnassociatedElasticIPAddresses = unassociatedAddresses
-	return check, nil
+	v.UnassociatedElasticIPAddresses = unassociatedAddresses
+	return v, nil
 }
 
 func expandUnassociatedAddress(conn client.AWSClient, address types.Address) UnassociatedElasticIPAddress {

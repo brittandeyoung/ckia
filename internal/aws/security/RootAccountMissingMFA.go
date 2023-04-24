@@ -30,31 +30,21 @@ type RootAccountMissingMFACheck struct {
 	RootAccountsMissingMFA []RootAccountMissingMFA `json:"rootAccountsMissingMFA"`
 }
 
-func (v RootAccountMissingMFACheck) List() *RootAccountMissingMFACheck {
-	check := &RootAccountMissingMFACheck{
-		Check: common.Check{
-			Id:                  RootAccountMissingMFACheckId,
-			Name:                RootAccountMissingMFACheckName,
-			Description:         RootAccountMissingMFACheckDescription,
-			Criteria:            RootAccountMissingMFACheckCriteria,
-			RecommendedAction:   RootAccountMissingMFACheckRecommendedAction,
-			AdditionalResources: RootAccountMissingMFACheckAdditionalResources,
-		},
+func (v *RootAccountMissingMFACheck) List() *RootAccountMissingMFACheck {
+	v.Check = common.Check{
+		Id:                  RootAccountMissingMFACheckId,
+		Name:                RootAccountMissingMFACheckName,
+		Description:         RootAccountMissingMFACheckDescription,
+		Criteria:            RootAccountMissingMFACheckCriteria,
+		RecommendedAction:   RootAccountMissingMFACheckRecommendedAction,
+		AdditionalResources: RootAccountMissingMFACheckAdditionalResources,
 	}
-	return check
+
+	return v
 }
 
-func (v RootAccountMissingMFACheck) Run(ctx context.Context, conn client.AWSClient) (*RootAccountMissingMFACheck, error) {
-	check := &RootAccountMissingMFACheck{
-		Check: common.Check{
-			Id:                  RootAccountMissingMFACheckId,
-			Name:                RootAccountMissingMFACheckName,
-			Description:         RootAccountMissingMFACheckDescription,
-			Criteria:            RootAccountMissingMFACheckCriteria,
-			RecommendedAction:   RootAccountMissingMFACheckRecommendedAction,
-			AdditionalResources: RootAccountMissingMFACheckAdditionalResources,
-		},
-	}
+func (v *RootAccountMissingMFACheck) Run(ctx context.Context, conn client.AWSClient) (*RootAccountMissingMFACheck, error) {
+	v = v.List()
 
 	accountSummary, err := conn.IAM.GetAccountSummary(ctx, &iam.GetAccountSummaryInput{})
 
@@ -71,10 +61,10 @@ func (v RootAccountMissingMFACheck) Run(ctx context.Context, conn client.AWSClie
 	account := expandRootAccountMissingMFA(accountSummary.SummaryMap, aws.ToString(identity.Account))
 
 	if account != (RootAccountMissingMFA{}) {
-		check.RootAccountsMissingMFA = []RootAccountMissingMFA{account}
+		v.RootAccountsMissingMFA = []RootAccountMissingMFA{account}
 	}
 
-	return check, nil
+	return v, nil
 }
 
 func expandRootAccountMissingMFA(summaryMap map[string]int32, accountNumber string) RootAccountMissingMFA {
