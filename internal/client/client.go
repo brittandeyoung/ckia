@@ -6,6 +6,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/ec2"
 	"github.com/aws/aws-sdk-go-v2/service/elasticloadbalancingv2"
 	"github.com/aws/aws-sdk-go-v2/service/iam"
+	"github.com/aws/aws-sdk-go-v2/service/lambda"
 	"github.com/aws/aws-sdk-go-v2/service/pricing"
 	"github.com/aws/aws-sdk-go-v2/service/rds"
 	"github.com/aws/aws-sdk-go-v2/service/sts"
@@ -16,6 +17,7 @@ type AWSClient struct {
 	EC2        *ec2.Client
 	ELBv2      *elasticloadbalancingv2.Client
 	IAM        *iam.Client
+	Lambda     *lambda.Client
 	Pricing    *pricing.Client
 	RDS        *rds.Client
 	Region     string
@@ -28,6 +30,7 @@ func InitiateClient(cfg aws.Config) AWSClient {
 		EC2:        ec2.NewFromConfig(cfg),
 		ELBv2:      elasticloadbalancingv2.NewFromConfig(cfg),
 		IAM:        iam.NewFromConfig(cfg),
+		Lambda:     lambda.NewFromConfig(cfg),
 		Pricing:    pricing.NewFromConfig(cfg),
 		RDS:        rds.NewFromConfig(cfg),
 		Region:     cfg.Region,
