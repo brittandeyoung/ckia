@@ -2,7 +2,6 @@ package cost
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -50,11 +49,9 @@ func (v HighErrorRateLambdaFunctionsCheck) List() *HighErrorRateLambdaFunctionsC
 
 func (v HighErrorRateLambdaFunctionsCheck) Run(ctx context.Context, conn client.AWSClient) (*HighErrorRateLambdaFunctionsCheck, error) {
 	check := new(HighErrorRateLambdaFunctionsCheck).List()
-
 	currentTime := time.Now()
 
 	var lambdaFunctions []HighErrorRateLambdaFunction
-
 	in := &lambda.ListFunctionsInput{}
 
 	paginator := lambda.NewListFunctionsPaginator(conn.Lambda, in, func(o *lambda.ListFunctionsPaginatorOptions) {
@@ -114,7 +111,6 @@ func (v HighErrorRateLambdaFunctionsCheck) Run(ctx context.Context, conn client.
 				})
 
 				if err != nil {
-					fmt.Println(err)
 					return nil, err
 				}
 
